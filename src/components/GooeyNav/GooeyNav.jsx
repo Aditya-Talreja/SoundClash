@@ -281,9 +281,11 @@ const GooeyNav = ({
     const fallback = fallbackRef.current;
     if (!stage || !canvas || !list || !overlay || !fallback) return;
 
+    const isMobile = typeof window !== 'undefined' && window.matchMedia('(max-width: 768px)').matches;
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const gl = canvas.getContext('webgl2', { alpha: true, premultipliedAlpha: true, antialias: false });
+    const gl = isMobile ? null : canvas.getContext('webgl2', { alpha: true, premultipliedAlpha: true, antialias: false });
     const pipeline = gl ? build(gl) : null;
+    stage.setAttribute('data-fallback', pipeline ? 'false' : 'true');
     fallback.style.display = pipeline ? 'none' : 'block';
     canvas.style.display = pipeline ? 'block' : 'none';
 
@@ -492,8 +494,11 @@ const GooeyNav = ({
           fallback.style.transform = `translate(${box.x.toFixed(2)}px, ${box.y.toFixed(2)}px)`;
           fallback.style.width = `${box.w}px`;
           fallback.style.height = `${box.h}px`;
+          fallback.style.display = 'block';
+          fallback.style.opacity = '1';
+        } else {
+          fallback.style.opacity = '0';
         }
-        fallback.style.opacity = box ? '1' : '0';
         return;
       }
 
@@ -661,7 +666,7 @@ const GooeyNav = ({
 
     const go = (index, animate) => {
       if (index === target) return;
-      if (!rects[index] || !animate || reduced || target < 0) {
+      if (!rects[index] || !animate || reduced || target < 0 || !pipeline) {
         settle(index);
         return;
       }
@@ -815,7 +820,7 @@ const GooeyNav = ({
         <canvas ref={canvasRef} className="pointer-events-none absolute left-0 top-0" aria-hidden="true" />
         <span
           ref={fallbackRef}
-          className="pointer-events-none absolute left-0 top-0 hidden rounded-full bg-[var(--gn-pill)]"
+          className="gn-fallback-pill pointer-events-none absolute left-0 top-0 hidden rounded-full bg-[var(--gn-pill)] z-[1]"
           aria-hidden="true"
         />
         <ul ref={listRef} className={LIST}>

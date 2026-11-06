@@ -326,6 +326,18 @@ const WarpText = ({
   });
   const contextRef = useRef(null);
   const [failed, setFailed] = useState(false);
+  const [isMobile, setIsMobile] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    return window.matchMedia('(max-width: 768px)').matches || window.matchMedia('(pointer: coarse)').matches;
+  });
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return undefined;
+    const mql = window.matchMedia('(max-width: 768px)');
+    const onChange = e => setIsMobile(e.matches || window.matchMedia('(pointer: coarse)').matches);
+    mql.addEventListener?.('change', onChange);
+    return () => mql.removeEventListener?.('change', onChange);
+  }, []);
 
   useEffect(() => {
     propsRef.current = {
@@ -380,6 +392,7 @@ const WarpText = ({
   }, [text, color, align, fontSize, fontWeight, fontFamily, letterSpacing, lineHeight]);
 
   useEffect(() => {
+    if (isMobile) return undefined;
     const container = containerRef.current;
     if (!container || typeof window === 'undefined') return undefined;
 
@@ -668,6 +681,39 @@ const WarpText = ({
     };
   }, []);
 
+  if (isMobile) {
+    return (
+      <div
+        ref={containerRef}
+        className={`relative block w-full overflow-hidden ${className}`.trim()}
+        style={{
+          ...style,
+          height: 'auto',
+          minHeight: 'auto',
+        }}
+        role="heading"
+        aria-level={2}
+        aria-label={text}
+      >
+        <div
+          style={{
+            fontFamily: fontFamily || "'Space Grotesk', system-ui, sans-serif",
+            fontWeight: fontWeight || 900,
+            fontSize: 'clamp(2.5rem, 8.5vw, 6rem)',
+            lineHeight: typeof lineHeight === 'number' ? lineHeight : 0.92,
+            letterSpacing: '-0.04em',
+            color: color || '#ffffff',
+            whiteSpace: 'pre-line',
+            textAlign: align || 'left',
+            textTransform: 'uppercase',
+          }}
+        >
+          {text}
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div
       ref={containerRef}
@@ -677,20 +723,28 @@ const WarpText = ({
       aria-label={text}
     >
       {failed && (
-        <span
-          className="absolute inset-0 flex items-center justify-center whitespace-pre-line px-[7%] text-center"
-          aria-hidden="true"
+        <div
+          className="absolute inset-0 flex flex-col justify-center"
           style={{
-            color,
-            fontFamily,
-            fontWeight,
-            fontSize: getFontValue(fontSize),
-            letterSpacing: getFontValue(letterSpacing),
-            lineHeight
+            textAlign: align || 'left',
           }}
+          aria-hidden="true"
         >
-          {text}
-        </span>
+          <div
+            style={{
+              color,
+              fontFamily: fontFamily || "'Space Grotesk', system-ui, sans-serif",
+              fontWeight: fontWeight || 900,
+              fontSize: 'clamp(2.5rem, 8.5vw, 6rem)',
+              letterSpacing: '-0.04em',
+              lineHeight: typeof lineHeight === 'number' ? lineHeight : 0.92,
+              whiteSpace: 'pre-line',
+              textTransform: 'uppercase',
+            }}
+          >
+            {text}
+          </div>
+        </div>
       )}
     </div>
   );

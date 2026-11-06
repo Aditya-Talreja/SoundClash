@@ -474,7 +474,7 @@ export default function CRTWarp({
       depth: false,
       stencil: false,
       premultipliedAlpha: true,
-      powerPreference: 'high-performance'
+      powerPreference: 'default'
     });
     if (!gl) {
       canvas.remove();
@@ -848,6 +848,11 @@ export default function CRTWarp({
       state.lost = true;
     };
 
+    const onRestored = () => {
+      state.lost = false;
+      wake();
+    };
+
     const onVisibility = () => {
       state.visible = !document.hidden;
       if (state.visible) wake();
@@ -860,6 +865,7 @@ export default function CRTWarp({
     window.addEventListener('pointerdown', onDown);
     document.documentElement.addEventListener('pointerleave', onLeave);
     canvas.addEventListener('webglcontextlost', onLost);
+    canvas.addEventListener('webglcontextrestored', onRestored);
     wake();
 
     return () => {
@@ -870,6 +876,7 @@ export default function CRTWarp({
       window.removeEventListener('pointerdown', onDown);
       document.documentElement.removeEventListener('pointerleave', onLeave);
       canvas.removeEventListener('webglcontextlost', onLost);
+      canvas.removeEventListener('webglcontextrestored', onRestored);
       state.cells.forEach(target => deleteTarget(gl, target));
       state.glows.forEach(target => deleteTarget(gl, target));
       [content, glowSource, blur, display].forEach(item => gl.deleteProgram(item.program));

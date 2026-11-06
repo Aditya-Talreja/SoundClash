@@ -86,6 +86,23 @@ body {
   color: var(--gn-ink, #f4f4f5);
 }
 
+/* Fallback & mobile pill styling */
+[data-fallback="true"] .gn-link {
+  position: relative;
+  z-index: 2;
+}
+
+[data-fallback="true"] [data-active] .gn-link {
+  color: var(--gn-active-ink, #000000) !important;
+  position: relative;
+  z-index: 2;
+}
+
+.gn-fallback-pill {
+  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), width 0.28s cubic-bezier(0.16, 1, 0.3, 1), height 0.28s ease, opacity 0.2s ease;
+  will-change: transform, width;
+}
+
 .gn-ghost {
   display: inline-flex;
   align-items: center;
