@@ -184,6 +184,12 @@ body {
   .arcade-grid {
     flex-direction: column;
     gap: 2.5rem;
+    align-items: center;
+  }
+
+  .arcade-grid .brutalist-card {
+    max-width: clamp(320px, calc((100% - 2.25rem) * 1.25 / 2.25), 740px);
+    width: 100%;
   }
 }
 
