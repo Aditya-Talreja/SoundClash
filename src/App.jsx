@@ -37,33 +37,25 @@ function App() {
         />
       </div>
 
-      {/* Crossfading Section Content */}
+      {/* Section Content: Mount only active section to avoid WebGL context collisions */}
       <main className="relative w-full h-[100dvh] overflow-hidden">
-        {/* Graffiti Section */}
-        <div
-          className={`absolute inset-0 w-full h-full transition-opacity duration-500 ease-in-out ${
-            activeIndex === 0 ? 'opacity-100 z-10 pointer-events-auto' : 'opacity-0 z-0 pointer-events-none'
-          }`}
-          style={{ willChange: 'opacity' }}
-        >
-          <GraffitiSection
-            active={activeIndex === 0}
-            onNavigateToCypher={() => setActiveIndex(1)}
-          />
-        </div>
+        {activeIndex === 0 && (
+          <div className="absolute inset-0 w-full h-full pointer-events-auto">
+            <GraffitiSection
+              active={true}
+              onNavigateToCypher={() => setActiveIndex(1)}
+            />
+          </div>
+        )}
 
-        {/* Cypher Section */}
-        <div
-          className={`absolute inset-0 w-full h-full transition-opacity duration-500 ease-in-out ${
-            activeIndex === 1 ? 'opacity-100 z-10 pointer-events-auto' : 'opacity-0 z-0 pointer-events-none'
-          }`}
-          style={{ willChange: 'opacity' }}
-        >
-          <CypherSection
-            active={activeIndex === 1}
-            onNavigateToGraffiti={() => setActiveIndex(0)}
-          />
-        </div>
+        {activeIndex === 1 && (
+          <div className="absolute inset-0 w-full h-full pointer-events-auto">
+            <CypherSection
+              active={true}
+              onNavigateToGraffiti={() => setActiveIndex(0)}
+            />
+          </div>
+        )}
       </main>
     </div>
   );

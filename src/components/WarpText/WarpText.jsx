@@ -325,18 +325,29 @@ const WarpText = ({
     intro
   });
   const contextRef = useRef(null);
+  const [shouldLoadGl, setShouldLoadGl] = useState(false);
+  const [glReady, setGlReady] = useState(false);
   const [failed, setFailed] = useState(false);
-  const [isMobile, setIsMobile] = useState(() => {
-    if (typeof window === 'undefined') return false;
-    return window.matchMedia('(max-width: 768px)').matches || window.matchMedia('(pointer: coarse)').matches;
-  });
 
   useEffect(() => {
-    if (typeof window === 'undefined') return undefined;
-    const mql = window.matchMedia('(max-width: 768px)');
-    const onChange = e => setIsMobile(e.matches || window.matchMedia('(pointer: coarse)').matches);
-    mql.addEventListener?.('change', onChange);
-    return () => mql.removeEventListener?.('change', onChange);
+    const container = containerRef.current;
+    if (!container || typeof window === 'undefined') return undefined;
+
+    if ('IntersectionObserver' in window) {
+      const observer = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting) {
+            setShouldLoadGl(true);
+            observer.disconnect();
+          }
+        },
+        { rootMargin: '200px' }
+      );
+      observer.observe(container);
+      return () => observer.disconnect();
+    } else {
+      setShouldLoadGl(true);
+    }
   }, []);
 
   useEffect(() => {
@@ -392,7 +403,7 @@ const WarpText = ({
   }, [text, color, align, fontSize, fontWeight, fontFamily, letterSpacing, lineHeight]);
 
   useEffect(() => {
-    if (isMobile) return undefined;
+    if (!shouldLoadGl) return undefined;
     const container = containerRef.current;
     if (!container || typeof window === 'undefined') return undefined;
 
@@ -445,6 +456,8 @@ const WarpText = ({
     canvas.style.height = '100%';
     canvas.style.display = 'block';
     canvas.style.touchAction = 'pan-y';
+    canvas.style.opacity = '0';
+    canvas.style.transition = 'opacity 0.45s ease';
     canvas.setAttribute('aria-hidden', 'true');
     container.appendChild(canvas);
 
@@ -521,6 +534,8 @@ const WarpText = ({
       program.uniforms.uBackdrop.value = getLuminance(raster.ink) < 0.5 ? 1 : 0;
       textReady = true;
       renderOnce();
+      canvas.style.opacity = '1';
+      setGlReady(true);
     };
 
     const resize = () => {
@@ -565,6 +580,7 @@ const WarpText = ({
       contextLost = true;
       if (raf) cancelAnimationFrame(raf);
       raf = 0;
+      setGlReady(false);
       setFailed(true);
     };
 
@@ -679,73 +695,45 @@ const WarpText = ({
 
       if (canvas.parentNode === container) container.removeChild(canvas);
     };
-  }, []);
+  }, [shouldLoadGl]);
 
-  if (isMobile) {
-    return (
+  return (
+    <div
+      ref={containerRef}
+      className={`relative block w-full overflow-hidden isolate rounded-[inherit] ${className}`.trim()}
+      style={{
+        ...style,
+        minHeight: style?.height || 'clamp(180px, 28vw, 320px)',
+      }}
+      role="heading"
+      aria-level={2}
+      aria-label={text}
+    >
+      {/* Underlying crisp text: renders immediately, then smoothly crossfades when WebGL is ready */}
       <div
-        ref={containerRef}
-        className={`relative block w-full overflow-hidden ${className}`.trim()}
+        className="absolute inset-0 flex flex-col justify-center pointer-events-none"
         style={{
-          ...style,
-          height: 'auto',
-          minHeight: 'auto',
+          textAlign: align || 'left',
+          opacity: glReady ? 0 : 1,
+          transition: 'opacity 0.45s ease',
         }}
-        role="heading"
-        aria-level={2}
-        aria-label={text}
+        aria-hidden="true"
       >
         <div
           style={{
             fontFamily: fontFamily || "'Space Grotesk', system-ui, sans-serif",
             fontWeight: fontWeight || 900,
-            fontSize: 'clamp(2.5rem, 8.5vw, 6rem)',
+            fontSize: 'clamp(2.5rem, 8.5vw, 6.5rem)',
             lineHeight: typeof lineHeight === 'number' ? lineHeight : 0.92,
             letterSpacing: '-0.04em',
             color: color || '#ffffff',
             whiteSpace: 'pre-line',
-            textAlign: align || 'left',
             textTransform: 'uppercase',
           }}
         >
           {text}
         </div>
       </div>
-    );
-  }
-
-  return (
-    <div
-      ref={containerRef}
-      className={`relative block min-h-[220px] w-full overflow-hidden isolate rounded-[inherit] ${className}`.trim()}
-      style={style}
-      role="img"
-      aria-label={text}
-    >
-      {failed && (
-        <div
-          className="absolute inset-0 flex flex-col justify-center"
-          style={{
-            textAlign: align || 'left',
-          }}
-          aria-hidden="true"
-        >
-          <div
-            style={{
-              color,
-              fontFamily: fontFamily || "'Space Grotesk', system-ui, sans-serif",
-              fontWeight: fontWeight || 900,
-              fontSize: 'clamp(2.5rem, 8.5vw, 6rem)',
-              letterSpacing: '-0.04em',
-              lineHeight: typeof lineHeight === 'number' ? lineHeight : 0.92,
-              whiteSpace: 'pre-line',
-              textTransform: 'uppercase',
-            }}
-          >
-            {text}
-          </div>
-        </div>
-      )}
     </div>
   );
 };
