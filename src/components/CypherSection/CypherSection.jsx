@@ -48,7 +48,7 @@ function CypherSection({
   };
 
   return (
-    <section className="relative w-full h-screen overflow-hidden bg-[#0d0d12]">
+    <section className="relative w-full h-full overflow-hidden bg-[#0d0d12]">
       {/* Full-screen Procedural FaultyTerminal Background - Fixed in place while cards scroll */}
       <div className="fixed inset-0 w-full h-full pointer-events-none z-0">
         <FaultyTerminal
@@ -79,16 +79,14 @@ function CypherSection({
         />
       </div>
 
-      {/* Foreground Scroll Container: Optimized hardware accelerated scrolling */}
+      {/* Foreground Scroll Container: Native touch scrolling */}
       <div
         ref={scrollContainerRef}
-        className="absolute inset-0 z-10 w-full h-full overflow-y-auto overflow-x-hidden pointer-events-auto"
+        className="absolute inset-0 z-10 w-full h-full overflow-y-auto overflow-x-hidden pointer-events-auto [touch-action:pan-y] [overscroll-behavior-y:contain]"
         style={{
           paddingTop: 'clamp(110px, 14vh, 150px)',
           paddingBottom: 'clamp(80px, 12vh, 120px)',
           WebkitOverflowScrolling: 'touch',
-          transform: 'translateZ(0)',
-          willChange: 'scroll-position',
         }}
       >
         <div

@@ -321,8 +321,8 @@ const VariableProximity = forwardRef((props, ref) => {
     const root = document.documentElement;
     window.addEventListener('mousemove', handleMouseMove, { passive: true });
     window.addEventListener('touchmove', handleTouchMove, { passive: true });
-    window.addEventListener('touchend', handleLeave);
-    window.addEventListener('touchcancel', handleLeave);
+    window.addEventListener('touchend', handleLeave, { passive: true });
+    window.addEventListener('touchcancel', handleLeave, { passive: true });
     window.addEventListener('scroll', schedule, { capture: true, passive: true });
     window.addEventListener('resize', relayout);
     root.addEventListener('mouseleave', handleLeave);

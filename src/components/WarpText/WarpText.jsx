@@ -431,6 +431,7 @@ const WarpText = ({
     canvas.style.width = '100%';
     canvas.style.height = '100%';
     canvas.style.display = 'block';
+    canvas.style.touchAction = 'pan-y';
     canvas.setAttribute('aria-hidden', 'true');
     container.appendChild(canvas);
 

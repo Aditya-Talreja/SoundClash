@@ -15,7 +15,7 @@ function App() {
   const [activeIndex, setActiveIndex] = useState(0);
 
   return (
-    <div className="relative min-h-screen bg-[#0a0a0a] overflow-hidden select-none">
+    <div className="relative min-h-[100dvh] bg-[#0a0a0a] overflow-hidden">
       {/* Centered GooeyNav navbar with high z-index and explicit isolation */}
       <div className="fixed top-4 sm:top-6 left-1/2 -translate-x-1/2 z-[100] isolate pointer-events-auto max-w-[calc(100vw-1.5rem)]">
         <GooeyNav
@@ -38,7 +38,7 @@ function App() {
       </div>
 
       {/* Crossfading Section Content */}
-      <main className="relative w-full h-screen overflow-hidden">
+      <main className="relative w-full h-[100dvh] overflow-hidden">
         {/* Graffiti Section */}
         <div
           className={`absolute inset-0 w-full h-full transition-opacity duration-500 ease-in-out ${

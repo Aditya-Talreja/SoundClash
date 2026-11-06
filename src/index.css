@@ -182,10 +182,7 @@ body {
   user-select: text;
   min-width: 0;
   width: 100%;
-  transform: translateZ(0);
-  will-change: transform;
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
+  touch-action: pan-y;
 }
 
 @media (max-width: 640px) {
