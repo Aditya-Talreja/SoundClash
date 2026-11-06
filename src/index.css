@@ -1,0 +1,374 @@
+@import "tailwindcss";
+
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  min-height: 100vh;
+  font-family: 'Space Grotesk', system-ui, -apple-system, sans-serif;
+  background: #0a0a0a;
+  color: #f0f0f0;
+  overflow-x: hidden;
+}
+
+/* === GooeyNav Specific Styles for Tailwind v4 compatibility === */
+.gn-root {
+  position: relative;
+  display: inline-flex;
+  max-width: 100%;
+  font-size: var(--gn-font, 14px);
+  line-height: 1.2;
+}
+
+.gn-framed {
+  border-radius: 9999px;
+  padding: var(--gn-pad, 6px);
+  background: var(--gn-frame);
+  backdrop-filter: blur(20px) saturate(1.6);
+  -webkit-backdrop-filter: blur(20px) saturate(1.6);
+  box-shadow: var(--gn-frame-shadow);
+  border: 1px solid var(--gn-frame-edge, rgba(255, 255, 255, 0.12));
+}
+
+.gn-list {
+  position: relative;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  list-style: none;
+  flex-wrap: nowrap;
+  gap: var(--gn-gap, 4px);
+  align-items: center;
+}
+
+.gn-overlay {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  list-style: none;
+  flex-wrap: nowrap;
+  gap: var(--gn-gap, 4px);
+  align-items: center;
+  pointer-events: none;
+  visibility: hidden;
+  color: var(--gn-active-ink, #000);
+  clip-path: inset(100%);
+}
+
+.gn-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  white-space: nowrap;
+  border-radius: 9999px;
+  border: none;
+  background: transparent;
+  padding: var(--gn-y, 9px) var(--gn-x, 16px);
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  color: var(--gn-muted, rgba(244, 244, 245, 0.62));
+  transition: color 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.gn-link:hover,
+[data-active] .gn-link {
+  color: var(--gn-ink, #f4f4f5);
+}
+
+.gn-ghost {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  white-space: nowrap;
+  border-radius: 9999px;
+  border: none;
+  background: transparent;
+  padding: var(--gn-y, 9px) var(--gn-x, 16px);
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  font-weight: 600;
+  text-decoration: none;
+  color: inherit;
+}
+
+.gn-rim {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: inset 0 0 0 1px var(--gn-frame-edge, rgba(255, 255, 255, 0.08)), inset 0 1px 0 var(--gn-frame-highlight, rgba(255, 255, 255, 0.07));
+}
+
+/* === Responsive scale for mobile devices === */
+@media (max-width: 640px) {
+  .gn-root {
+    --gn-font: 14px !important;
+    --gn-x: 16px !important;
+    --gn-y: 8px !important;
+    --gn-pad: 5px !important;
+    --gn-gap: 4px !important;
+  }
+}
+
+@media (max-width: 380px) {
+  .gn-root {
+    --gn-font: 13px !important;
+    --gn-x: 12px !important;
+    --gn-y: 7px !important;
+    --gn-pad: 4px !important;
+    --gn-gap: 3px !important;
+  }
+}
+
+/* =========================================
+   ARCADE GRID & BRUTALIST CARDS
+========================================= */
+:root {
+  --neon-cyan: #00f0ff;
+  --neon-pink: #ff00a0;
+  --neon-green: #ccff00;
+  --neon-orange: #ff5500;
+  --neon-yellow: #ffe600;
+  --card-grey: #b3b3b3;
+  --text-dark: #000000;
+}
+
+.variable-proximity-demo {
+  font-family: 'Space Grotesk', system-ui, sans-serif !important;
+  color: #ffffff;
+  line-height: 1.1;
+  letter-spacing: -0.025em;
+  font-weight: 600;
+  cursor: default;
+}
+
+.arcade-grid {
+  display: flex;
+  gap: 2.25rem;
+  align-items: stretch;
+  width: 100%;
+  margin: 0 auto;
+}
+
+@media (max-width: 1024px) {
+  .arcade-grid {
+    flex-direction: column;
+    gap: 2.5rem;
+  }
+}
+
+.brutalist-card {
+  background-color: rgba(10, 8, 16, 0.72);
+  color: #ffffff;
+  border: 3px solid #ffffff;
+  padding: 2.5rem 2.75rem;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  display: flex;
+  flex-direction: column;
+  border-radius: 0;
+  user-select: text;
+  min-width: 0;
+  width: 100%;
+  transform: translateZ(0);
+  will-change: transform;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+@media (max-width: 640px) {
+  .brutalist-card {
+    padding: 1.5rem 1.25rem;
+  }
+}
+
+.brutalist-card h2 {
+  font-size: 2.25rem;
+  font-weight: 900;
+  margin-bottom: 1.5rem;
+  border-bottom: none;
+  display: inline-block;
+  color: #ffffff;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
+@media (max-width: 640px) {
+  .brutalist-card h2 {
+    font-size: 1.65rem;
+    margin-bottom: 1rem;
+  }
+}
+
+.brutalist-card h3 {
+  font-size: 1.25rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+  color: #ffffff;
+  letter-spacing: 0.5px;
+}
+
+@media (max-width: 640px) {
+  .brutalist-card h3 {
+    font-size: 1.1rem;
+    margin-top: 1.25rem;
+  }
+}
+
+.brutalist-card p {
+  font-size: 1rem;
+  line-height: 1.65;
+  font-weight: 500;
+  margin-bottom: 1.25rem;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+@media (max-width: 640px) {
+  .brutalist-card p {
+    font-size: 0.95rem;
+    line-height: 1.55;
+    margin-bottom: 1rem;
+  }
+}
+
+.brutalist-card p:last-of-type {
+  margin-bottom: 0;
+}
+
+.brutalist-card blockquote {
+  border-left: 6px solid #ffffff;
+  margin: 1.5rem 0;
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.08);
+  padding: 1rem 1.5rem;
+}
+
+@media (max-width: 640px) {
+  .brutalist-card blockquote {
+    padding: 0.75rem 1rem;
+    font-size: 0.95rem;
+    margin: 1.2rem 0;
+  }
+}
+
+.brutalist-card a {
+  color: #00f0ff;
+  text-decoration: underline;
+  text-decoration-thickness: 3px;
+  font-weight: 900;
+  transition: opacity 0.15s ease, color 0.15s ease;
+}
+
+.brutalist-card a:hover {
+  background-color: transparent;
+  color: #00f0ff;
+  opacity: 0.85;
+}
+
+.card-wide {
+  flex: 1.25;
+  box-shadow: 8px 8px 0 0 rgba(0, 0, 0, 0.6);
+}
+
+.card-wide:hover {
+  transform: translate(-3px, -3px);
+  box-shadow: 12px 12px 0 0 rgba(0, 0, 0, 0.75);
+}
+
+.card-wide:active {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0 0 rgba(0, 0, 0, 0.5);
+}
+
+.card-narrow {
+  flex: 1;
+  box-shadow: 8px 8px 0 0 rgba(0, 0, 0, 0.6);
+}
+
+.card-narrow:hover {
+  transform: translate(-3px, -3px);
+  box-shadow: 12px 12px 0 0 rgba(0, 0, 0, 0.75);
+}
+
+.card-narrow:active {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0 0 rgba(0, 0, 0, 0.5);
+}
+
+/* Staggered Card Entrance Animations (Left -> Right -> 3rd -> 4th) */
+@keyframes cardEntrance {
+  0% {
+    opacity: 0;
+    translate: 0 45px;
+  }
+  100% {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+
+.animate-card-1,
+.section-active .animate-card-1 {
+  animation: cardEntrance 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: 0.08s;
+}
+
+.animate-card-2,
+.section-active .animate-card-2 {
+  animation: cardEntrance 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: 0.22s;
+}
+
+.animate-card-3,
+.section-active .animate-card-3 {
+  animation: cardEntrance 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: 0.36s;
+}
+
+.animate-card-4,
+.section-active .animate-card-4 {
+  animation: cardEntrance 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: 0.50s;
+}
+
+.section-inactive .animate-card-1,
+.section-inactive .animate-card-2,
+.section-inactive .animate-card-3,
+.section-inactive .animate-card-4 {
+  animation: none !important;
+  opacity: 0 !important;
+  translate: 0 35px !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-card-1,
+  .animate-card-2,
+  .animate-card-3,
+  .animate-card-4,
+  .section-active .animate-card-1,
+  .section-active .animate-card-2,
+  .section-active .animate-card-3,
+  .section-active .animate-card-4 {
+    animation: none !important;
+    opacity: 1 !important;
+    translate: 0 0 !important;
+  }
+}
+
+
