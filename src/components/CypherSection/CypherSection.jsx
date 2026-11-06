@@ -1,4 +1,4 @@
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import FaultyTerminal from '../FaultyTerminal/FaultyTerminal';
 import WarpText from '../WarpText/WarpText';
 import VariableProximity from '../VariableProximity/VariableProximity';
@@ -30,6 +30,18 @@ function CypherSection({
   const getInGetLoudRef = useRef(null);
   const stayInTheLoopRef = useRef(null);
   const scrollContainerRef = useRef(null);
+  const [isMobile, setIsMobile] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    return window.matchMedia('(max-width: 768px)').matches || window.matchMedia('(pointer: coarse)').matches;
+  });
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return undefined;
+    const mql = window.matchMedia('(max-width: 768px)');
+    const onChange = e => setIsMobile(e.matches || window.matchMedia('(pointer: coarse)').matches);
+    mql.addEventListener?.('change', onChange);
+    return () => mql.removeEventListener?.('change', onChange);
+  }, []);
 
   useEffect(() => {
     if (active) {
@@ -64,14 +76,14 @@ function CypherSection({
           mouseGlow={0.6}
           curvature={0.1}
           vignette={0.25}
-          clickEffect="glitch"
+          clickEffect={isMobile ? 'none' : 'glitch'}
           scramble={0.5}
           scanlineIntensity={0.5}
           glitchAmount={1}
           flickerAmount={1}
           noiseAmp={1}
           chromaticAberration={0}
-          mouseReact
+          mouseReact={!isMobile}
           pageLoadAnimation
           pause={!active}
           lightMode={false}
