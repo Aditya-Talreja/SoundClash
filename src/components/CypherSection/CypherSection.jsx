@@ -76,7 +76,7 @@ function CypherSection({
           mouseGlow={0.6}
           curvature={0.1}
           vignette={0.25}
-          clickEffect={isMobile ? 'none' : 'glitch'}
+          clickEffect="none"
           scramble={0.5}
           scanlineIntensity={0.5}
           glitchAmount={1}
@@ -147,7 +147,7 @@ function CypherSection({
                       chromatic={0.35}
                       idleDrift={0.2}
                       ripple
-                      clickRipple
+                      clickRipple={false}
                       intro
                       fontSize="clamp(3rem, 15vw, 7.25rem)"
                       fontWeight={900}
@@ -341,7 +341,7 @@ function CypherSection({
                       chromatic={0.35}
                       idleDrift={0.2}
                       ripple
-                      clickRipple
+                      clickRipple={false}
                       intro
                       fontSize={116}
                       fontWeight={900}
@@ -542,7 +542,7 @@ function CypherSection({
                       chromatic={0.35}
                       idleDrift={0.2}
                       ripple
-                      clickRipple
+                      clickRipple={false}
                       intro
                       fontSize={110}
                       fontWeight={900}
@@ -730,7 +730,7 @@ function CypherSection({
                       chromatic={0.35}
                       idleDrift={0.2}
                       ripple
-                      clickRipple
+                      clickRipple={false}
                       intro
                       fontSize={104}
                       fontWeight={900}

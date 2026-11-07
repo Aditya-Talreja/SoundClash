@@ -10,7 +10,7 @@ const sectionItems = [
   { label: 'SoundClash' },
   { label: 'Graffiti' },
   { label: 'Cypher' },
-  { label: 'The Crew' }
+  { label: 'TheCrew' }
 ];
 
 const logoItem = [

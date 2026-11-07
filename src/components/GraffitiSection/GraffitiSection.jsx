@@ -77,7 +77,7 @@ function GraffitiSection({
           vignette={0.3}
           brightness={1}
           intro
-          mouseReact={false}
+          mouseReact={true}
           changeOnClick={false}
           autoChange={0}
           dpr={1}
@@ -142,7 +142,7 @@ function GraffitiSection({
                       chromatic={0.35}
                       idleDrift={0.2}
                       ripple
-                      clickRipple
+                      clickRipple={false}
                       intro
                       fontSize="clamp(3rem, 15vw, 7.25rem)"
                       fontWeight={900}
@@ -336,7 +336,7 @@ function GraffitiSection({
                       chromatic={0.35}
                       idleDrift={0.2}
                       ripple
-                      clickRipple
+                      clickRipple={false}
                       intro
                       fontSize={116}
                       fontWeight={900}
@@ -537,7 +537,7 @@ function GraffitiSection({
                       chromatic={0.35}
                       idleDrift={0.2}
                       ripple
-                      clickRipple
+                      clickRipple={false}
                       intro
                       fontSize={110}
                       fontWeight={900}
@@ -725,7 +725,7 @@ function GraffitiSection({
                       chromatic={0.35}
                       idleDrift={0.2}
                       ripple
-                      clickRipple
+                      clickRipple={false}
                       intro
                       fontSize={104}
                       fontWeight={900}

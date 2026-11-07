@@ -812,6 +812,7 @@ const GooeyNav = ({
         ...THEMES[palette],
         '--gn-pill': pillColor,
         '--gn-active-ink': textColor,
+        '--gn-transition-duration': `${animationTime}ms`,
         ...style
       }}
     >

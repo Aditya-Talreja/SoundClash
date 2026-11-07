@@ -68,7 +68,7 @@ function SoundClashSection({
           mouseStrength={1}
           trail={0.5}
           enableMouseInteraction={true}
-          clickRipple={true}
+          clickRipple={false}
           intro={true}
           disableAnimation={!active}
           className="pointer-events-none"
@@ -132,7 +132,7 @@ function SoundClashSection({
                       chromatic={0.35}
                       idleDrift={0.2}
                       ripple
-                      clickRipple
+                      clickRipple={false}
                       intro
                       fontSize="clamp(3rem, 15vw, 7.25rem)"
                       fontWeight={900}
@@ -364,7 +364,7 @@ function SoundClashSection({
                       chromatic={0.35}
                       idleDrift={0.2}
                       ripple
-                      clickRipple
+                      clickRipple={false}
                       intro
                       fontSize={116}
                       fontWeight={900}
@@ -529,7 +529,7 @@ function SoundClashSection({
                       chromatic={0.35}
                       idleDrift={0.2}
                       ripple
-                      clickRipple
+                      clickRipple={false}
                       intro
                       fontSize={110}
                       fontWeight={900}
@@ -646,7 +646,7 @@ function SoundClashSection({
                       chromatic={0.35}
                       idleDrift={0.2}
                       ripple
-                      clickRipple
+                      clickRipple={false}
                       intro
                       fontSize={104}
                       fontWeight={900}
