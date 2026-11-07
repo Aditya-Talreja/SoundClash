@@ -654,6 +654,7 @@ const GooeyNav = ({
     };
 
     const settle = index => {
+      fallback.getAnimations?.().forEach(animation => animation.cancel());
       pills.clear();
       drops.length = 0;
       target = index;
@@ -666,8 +667,34 @@ const GooeyNav = ({
 
     const go = (index, animate) => {
       if (index === target) return;
-      if (!rects[index] || !animate || reduced || target < 0 || !pipeline) {
+      if (!rects[index] || !animate || reduced || target < 0) {
         settle(index);
+        return;
+      }
+      if (!pipeline || !gl) {
+        const stageRect = stage.getBoundingClientRect();
+        const currentRect = fallback.getBoundingClientRect();
+        const from = {
+          x: currentRect.left - stageRect.left,
+          y: currentRect.top - stageRect.top,
+          w: currentRect.width,
+          h: currentRect.height
+        };
+        settle(index);
+        const box = shape(index, 1);
+        if (!box || box.w <= 0 || box.h <= 0 || from.w <= 0 || from.h <= 0 || !fallback.animate) return;
+        fallback.animate(
+          [
+            {
+              transform: `translate(${from.x}px, ${from.y}px) scale(${from.w / box.w}, ${from.h / box.h})`
+            },
+            { transform: `translate(${box.x}px, ${box.y}px) scale(1, 1)` }
+          ],
+          {
+            duration: settingsRef.current.animationTime,
+            easing: 'cubic-bezier(0.22, 1, 0.36, 1)'
+          }
+        );
         return;
       }
       const now = performance.now();
@@ -812,7 +839,6 @@ const GooeyNav = ({
         ...THEMES[palette],
         '--gn-pill': pillColor,
         '--gn-active-ink': textColor,
-        '--gn-transition-duration': `${animationTime}ms`,
         ...style
       }}
     >

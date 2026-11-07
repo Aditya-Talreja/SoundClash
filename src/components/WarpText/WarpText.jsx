@@ -326,8 +326,6 @@ const WarpText = ({
   });
   const contextRef = useRef(null);
   const [shouldLoadGl, setShouldLoadGl] = useState(false);
-  const [glReady, setGlReady] = useState(false);
-  const [failed, setFailed] = useState(false);
 
   useEffect(() => {
     const container = containerRef.current;
@@ -444,7 +442,6 @@ const WarpText = ({
       gl = renderer.gl;
     } catch (error) {
       console.warn('WarpText: WebGL could not be initialized.', error);
-      setFailed(true);
       return undefined;
     }
 
@@ -535,7 +532,6 @@ const WarpText = ({
       textReady = true;
       renderOnce();
       canvas.style.opacity = '1';
-      setGlReady(true);
     };
 
     const resize = () => {
@@ -580,8 +576,6 @@ const WarpText = ({
       contextLost = true;
       if (raf) cancelAnimationFrame(raf);
       raf = 0;
-      setGlReady(false);
-      setFailed(true);
     };
 
     const onVisibility = () => {
@@ -709,13 +703,12 @@ const WarpText = ({
       aria-level={2}
       aria-label={text}
     >
-      {/* Underlying crisp text: renders immediately, then smoothly crossfades when WebGL is ready */}
+      {/* Hidden crisp text placeholder; the WebGL text remains the visual heading. */}
       <div
         className="absolute inset-0 flex flex-col justify-center pointer-events-none"
         style={{
           textAlign: align || 'left',
-          opacity: glReady ? 0 : 1,
-          transition: 'opacity 0.45s ease',
+          opacity: 0,
         }}
         aria-hidden="true"
       >

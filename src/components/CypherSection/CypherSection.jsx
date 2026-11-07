@@ -20,7 +20,6 @@ function CypherSection({
   cardSocialContent = null,
   onNavigateToGraffiti,
   registerFormUrl = '#register',
-  connectUrl = '#team',
   socialLinks = DEFAULT_SOCIALS,
 }) {
   const containerRef = useRef(null);
@@ -115,7 +114,7 @@ function CypherSection({
             <div className="brutalist-card card-wide relative animate-card-1">
               {/* Top-Right Hanging Bookmark Ribbon: Transparent glass matching card, logo only */}
               <div
-                className="absolute -top-[3px] right-6 sm:right-8 md:right-10 w-16 sm:w-20 md:w-24 h-20 sm:h-24 md:h-28 z-20 border-x-[3px] border-b-[3px] border-white rounded-b-[18px] flex items-center justify-center p-2.5 sm:p-3 select-none pointer-events-auto"
+                className="card-bookmark"
                 style={{
                   backgroundColor: 'rgba(10, 8, 16, 0.72)',
                   boxShadow: '0 6px 14px rgba(0, 0, 0, 0.45)',
@@ -124,7 +123,7 @@ function CypherSection({
                 <img
                   src={groovityLogo}
                   alt="Groovity Logo"
-                  className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 object-contain"
+                  className="card-bookmark-logo"
                   draggable={false}
                 />
               </div>
@@ -133,7 +132,7 @@ function CypherSection({
                 cardLeftContent
               ) : (
                 <>
-                  <div className="w-full mb-6 overflow-hidden select-none -mt-2 pr-28 sm:pr-24 md:pr-28">
+                  <div className="card-title-reserve w-full mb-6 overflow-hidden select-none -mt-2">
                     <WarpText
                       text={'CYPHER.\nSTREET.\ngrooVITy.'}
                       align="left"
@@ -147,12 +146,12 @@ function CypherSection({
                       chromatic={0.35}
                       idleDrift={0.2}
                       ripple
-                      clickRipple={false}
+                      clickRipple
                       intro
-                      fontSize="clamp(3rem, 15vw, 7.25rem)"
+                      fontSize="clamp(2.75rem, 14cqi, 7.25rem)"
                       fontWeight={900}
                       color="#ffffff"
-                      style={{ height: 'clamp(200px, 58vw, 340px)', width: '100%' }}
+                      style={{ height: 'clamp(11rem, 42cqi, 21.25rem)', width: '100%' }}
                       fontFamily="'Space Grotesk', system-ui, sans-serif"
                       letterSpacing="-0.04em"
                       lineHeight={0.92}
@@ -341,7 +340,7 @@ function CypherSection({
                       chromatic={0.35}
                       idleDrift={0.2}
                       ripple
-                      clickRipple={false}
+                      clickRipple
                       intro
                       fontSize={116}
                       fontWeight={900}
@@ -518,9 +517,9 @@ function CypherSection({
                 minHeight: 'clamp(440px, 50vh, 580px)',
                 display: 'flex',
                 flexDirection: 'column',
-                alignItems: 'center',
+                alignItems: 'flex-start',
                 justifyContent: 'center',
-                textAlign: 'center',
+                textAlign: 'left',
                 margin: 0,
               }}
             >
@@ -528,7 +527,7 @@ function CypherSection({
                 cardBottomContent
               ) : (
                 <>
-                  <div className="w-full overflow-hidden select-none -mt-2 flex justify-center">
+                  <div className="w-full overflow-hidden select-none -mt-2">
                     <WarpText
                       text={'GET IN.\nGET LOUD.'}
                       align="left"
@@ -542,7 +541,7 @@ function CypherSection({
                       chromatic={0.35}
                       idleDrift={0.2}
                       ripple
-                      clickRipple={false}
+                      clickRipple
                       intro
                       fontSize={110}
                       fontWeight={900}
@@ -557,7 +556,7 @@ function CypherSection({
                   <div
                     ref={bottomDetailsRef}
                     style={{ position: 'relative' }}
-                    className="w-full mt-6 px-2 sm:px-6 cursor-default flex flex-col gap-6 text-left"
+                    className="w-full mt-6 px-2 sm:px-6 cursor-default flex flex-col items-start gap-6 text-left"
                   >
                     <div>
                       <VariableProximity
@@ -578,9 +577,9 @@ function CypherSection({
                         fontFamily="'Space Grotesk', system-ui, sans-serif"
                         style={{
                           fontFamily: "'Space Grotesk', system-ui, sans-serif",
-                          lineHeight: 1.28,
+                          lineHeight: 1.25,
                           letterSpacing: '-0.02em',
-                          color: 'rgba(255, 255, 255, 0.9)',
+                          color: '#ffffff',
                           textAlign: 'left',
                           width: '100%',
                         }}
@@ -622,7 +621,7 @@ function CypherSection({
                       </a>
                     </div>
 
-                    <div className="pt-2 flex flex-col gap-3">
+                    <div className="mt-2 flex flex-col gap-3">
                       <div>
                         <VariableProximity
                           label={
@@ -642,9 +641,9 @@ function CypherSection({
                           fontFamily="'Space Grotesk', system-ui, sans-serif"
                           style={{
                             fontFamily: "'Space Grotesk', system-ui, sans-serif",
-                            lineHeight: 1.28,
+                          lineHeight: 1.25,
                             letterSpacing: '-0.02em',
-                            color: 'rgba(255, 255, 255, 0.9)',
+                          color: '#ffffff',
                             textAlign: 'left',
                             width: '100%',
                           }}
@@ -730,7 +729,7 @@ function CypherSection({
                       chromatic={0.35}
                       idleDrift={0.2}
                       ripple
-                      clickRipple={false}
+                      clickRipple
                       intro
                       fontSize={104}
                       fontWeight={900}
@@ -766,16 +765,16 @@ function CypherSection({
                         fontFamily="'Space Grotesk', system-ui, sans-serif"
                         style={{
                           fontFamily: "'Space Grotesk', system-ui, sans-serif",
-                          lineHeight: 1.28,
+                          lineHeight: 1.25,
                           letterSpacing: '-0.02em',
-                          color: 'rgba(255, 255, 255, 0.9)',
+                          color: '#ffffff',
                           textAlign: 'left',
                           width: '100%',
                         }}
                       />
                     </div>
 
-                    <div className="flex flex-col gap-3.5 pt-2">
+                    <div className="mt-2 flex flex-col gap-3">
                       {socialLinks.map((social) => (
                         <div key={social.name}>
                           <a
