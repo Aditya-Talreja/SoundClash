@@ -170,6 +170,25 @@ const VariableProximity = forwardRef((props, ref) => {
     const settingsAt = level =>
       axes.map(({ axis, fromValue, toValue }) => `'${axis}' ${fromValue + (toValue - fromValue) * level}`).join(', ');
 
+    const letterOffsets = [];
+    let offsetsValid = false;
+
+    const measureOffsets = () => {
+      const root = rootRef.current;
+      if (!root) return;
+      const rootRect = root.getBoundingClientRect();
+      const letters = letterRefs.current;
+      letters.forEach((letter, index) => {
+        if (!letter) return;
+        const rect = letter.getBoundingClientRect();
+        letterOffsets[index] = {
+          x: rect.left - rootRect.left + rect.width / 2,
+          y: rect.top - rootRect.top + rect.height / 2
+        };
+      });
+      offsetsValid = true;
+    };
+
     const measureAnchors = () => {
       const letters = letterRefs.current;
       let left = Infinity;
@@ -204,13 +223,23 @@ const VariableProximity = forwardRef((props, ref) => {
         if (dx * dx + dy * dy >= radius * radius) return;
       }
 
-      letters.forEach((letter, index) => {
-        if (!letter) return;
-        const rect = letter.getBoundingClientRect();
-        const distance = Math.hypot(pointer.x - (rect.left + rect.width / 2), pointer.y - (rect.top + rect.height / 2));
-        targets[index] = strengthAt(distance, radius, falloff);
-        if (targets[index] > 0) nearAny = true;
-      });
+      const root = rootRef.current;
+      if (!root) return;
+
+      if (!offsetsValid || letterOffsets.length !== letters.length) {
+        measureOffsets();
+      }
+
+      const rootRect = root.getBoundingClientRect();
+      for (let index = 0; index < letters.length; index++) {
+        if (!letters[index] || !letterOffsets[index]) continue;
+        const lx = rootRect.left + letterOffsets[index].x;
+        const ly = rootRect.top + letterOffsets[index].y;
+        const distance = Math.hypot(pointer.x - lx, pointer.y - ly);
+        const str = strengthAt(distance, radius, falloff);
+        targets[index] = str;
+        if (str > 0) nearAny = true;
+      }
     };
 
     const waveAt = (index, time) => {
@@ -220,8 +249,13 @@ const VariableProximity = forwardRef((props, ref) => {
       return WAVE_PEAK * ((1 + Math.cos(phase)) / 2) ** 2.2;
     };
 
+    let isScrolling = false;
+    let scrollTimer = null;
+
     const tick = now => {
       frame = 0;
+      if (isScrolling) return;
+
       const delta = lastTime ? Math.min(now - lastTime, 64) : 16;
       lastTime = now;
 
@@ -293,15 +327,26 @@ const VariableProximity = forwardRef((props, ref) => {
 
     const schedule = () => {
       dirty = true;
-      if (!frame) frame = requestAnimationFrame(tick);
+      if (!frame && !isScrolling) frame = requestAnimationFrame(tick);
     };
 
     const relayout = () => {
+      offsetsValid = false;
       layoutDirty = true;
       schedule();
     };
 
+    const handleScroll = () => {
+      isScrolling = true;
+      if (scrollTimer) clearTimeout(scrollTimer);
+      scrollTimer = setTimeout(() => {
+        isScrolling = false;
+        schedule();
+      }, 80);
+    };
+
     const handleMove = (x, y) => {
+      if (isScrolling) return;
       pointer.x = x;
       pointer.y = y;
       pointer.active = true;
@@ -323,7 +368,7 @@ const VariableProximity = forwardRef((props, ref) => {
     window.addEventListener('touchmove', handleTouchMove, { passive: true });
     window.addEventListener('touchend', handleLeave, { passive: true });
     window.addEventListener('touchcancel', handleLeave, { passive: true });
-    window.addEventListener('scroll', schedule, { capture: true, passive: true });
+    window.addEventListener('scroll', handleScroll, { capture: true, passive: true });
     window.addEventListener('resize', relayout);
     root.addEventListener('mouseleave', handleLeave);
 
@@ -341,12 +386,13 @@ const VariableProximity = forwardRef((props, ref) => {
 
     return () => {
       cancelAnimationFrame(frame);
+      if (scrollTimer) clearTimeout(scrollTimer);
       observer?.disconnect();
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('touchmove', handleTouchMove);
       window.removeEventListener('touchend', handleLeave);
       window.removeEventListener('touchcancel', handleLeave);
-      window.removeEventListener('scroll', schedule, { capture: true });
+      window.removeEventListener('scroll', handleScroll, { capture: true });
       window.removeEventListener('resize', relayout);
       root.removeEventListener('mouseleave', handleLeave);
     };

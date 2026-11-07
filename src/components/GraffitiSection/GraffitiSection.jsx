@@ -91,7 +91,7 @@ function GraffitiSection({
         ref={scrollContainerRef}
         className="absolute inset-0 z-10 w-full h-full overflow-y-auto overflow-x-hidden pointer-events-auto [touch-action:pan-y] [overscroll-behavior-y:contain]"
         style={{
-          paddingTop: 'clamp(110px, 14vh, 150px)',
+          paddingTop: 'var(--section-content-top)',
           paddingBottom: 'clamp(80px, 12vh, 120px)',
           WebkitOverflowScrolling: 'touch',
         }}
@@ -128,7 +128,7 @@ function GraffitiSection({
                 cardLeftContent
               ) : (
                 <>
-                  <div className="w-full mb-6 overflow-hidden select-none -mt-2 pr-20 sm:pr-24 md:pr-28">
+                  <div className="w-full mb-6 overflow-hidden select-none -mt-2 pr-28 sm:pr-24 md:pr-28">
                     <WarpText
                       text={'GRUNGE.\nGRAFFITI.\ngrooVITy.'}
                       align="left"
@@ -144,10 +144,10 @@ function GraffitiSection({
                       ripple
                       clickRipple
                       intro
-                      fontSize={116}
+                      fontSize="clamp(3rem, 15vw, 7.25rem)"
                       fontWeight={900}
                       color="#ffffff"
-                      style={{ height: 'clamp(240px, 32vw, 340px)', width: '100%' }}
+                      style={{ height: 'clamp(200px, 58vw, 340px)', width: '100%' }}
                       fontFamily="'Space Grotesk', system-ui, sans-serif"
                       letterSpacing="-0.04em"
                       lineHeight={0.92}
