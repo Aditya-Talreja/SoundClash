@@ -435,7 +435,7 @@ const Dither = ({
       hx: 0,
       hy: 0,
       presence: 0,
-      reveal: 1
+      reveal: settingsRef.current.intro ? 0 : 1
     };
     let raf = 0;
     let last = 0;
