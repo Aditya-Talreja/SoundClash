@@ -238,6 +238,150 @@ body {
   margin: 0 auto;
 }
 
+.crew-profile-layout {
+  display: flex;
+  width: 100%;
+  max-width: 1380px;
+  flex-direction: column;
+  gap: 2.25rem;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+.crew-member-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 2.25rem;
+  align-items: stretch;
+  width: 100%;
+}
+
+.crew-leadership-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 2.25rem;
+  align-items: stretch;
+  width: calc(66.6667% - 0.75rem);
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.crew-member-card {
+  min-height: 0;
+  transition: transform 180ms ease, box-shadow 180ms ease;
+}
+
+.brutalist-card.profile-card {
+  aspect-ratio: auto;
+  min-height: 0;
+  overflow: visible;
+  padding: 1.75rem 2.75rem;
+}
+
+.profile-card-heading {
+  width: 100%;
+  height: clamp(6rem, 16cqi, 8rem);
+  flex: 0 0 auto;
+}
+
+.profile-card-heading-placeholder {
+  width: 100%;
+  height: 100%;
+}
+
+.profile-card-details {
+  display: flex;
+  width: 100%;
+  flex: 0 0 auto;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: center;
+  gap: 1rem;
+  color: #fff;
+}
+
+.profile-detail-row {
+  display: flex;
+  min-width: 0;
+  align-items: baseline;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+}
+
+.profile-detail-text {
+  font-family: 'Space Grotesk', system-ui, sans-serif !important;
+  line-height: 1.3 !important;
+  letter-spacing: -0.02em !important;
+}
+
+.brutalist-card a.profile-detail-link {
+  color: #00f0ff;
+  cursor: pointer;
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+}
+
+.crew-member-number {
+  color: rgba(255, 255, 255, 0.42);
+  font-size: clamp(2.5rem, 5vw, 4.5rem);
+  font-weight: 800;
+  line-height: 0.9;
+  letter-spacing: -0.06em;
+}
+
+@media (max-width: 1024px) {
+  .crew-member-grid {
+    gap: 1.5rem;
+  }
+
+  .crew-profile-layout {
+    gap: 1.5rem;
+  }
+
+  .crew-leadership-grid {
+    gap: 1.5rem;
+    width: calc(66.6667% - 0.5rem);
+  }
+}
+
+@media (min-width: 640px) {
+  .crew-profile-layout {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .crew-profile-layout {
+    padding-left: 2.5rem;
+    padding-right: 2.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .crew-profile-layout {
+    padding-left: 3rem;
+    padding-right: 3rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .crew-leadership-grid,
+  .crew-member-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.5rem;
+    width: 100%;
+  }
+
+  .brutalist-card.profile-card {
+    padding: 1.1rem 1.25rem;
+  }
+
+}
+
 @media (max-width: 1024px) {
   .arcade-grid {
     flex-direction: column;
@@ -632,16 +776,24 @@ body {
   animation-delay: 0.50s;
 }
 
+.animate-card-5,
+.section-active .animate-card-5 {
+  animation: cardEntrance 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: 0.64s;
+}
+
 /* After the intro, bring in the navbar first, then the cards from left to right. */
 .page-entry-sequence .animate-card-1 { animation-delay: 0.62s; }
 .page-entry-sequence .animate-card-2 { animation-delay: 0.84s; }
 .page-entry-sequence .animate-card-3 { animation-delay: 1.06s; }
 .page-entry-sequence .animate-card-4 { animation-delay: 1.28s; }
+.page-entry-sequence .animate-card-5 { animation-delay: 1.50s; }
 
 .section-inactive .animate-card-1,
 .section-inactive .animate-card-2,
 .section-inactive .animate-card-3,
-.section-inactive .animate-card-4 {
+.section-inactive .animate-card-4,
+.section-inactive .animate-card-5 {
   animation: none !important;
   opacity: 0 !important;
   translate: 0 35px !important;
@@ -652,10 +804,12 @@ body {
   .animate-card-2,
   .animate-card-3,
   .animate-card-4,
+  .animate-card-5,
   .section-active .animate-card-1,
   .section-active .animate-card-2,
   .section-active .animate-card-3,
-  .section-active .animate-card-4 {
+  .section-active .animate-card-4,
+  .section-active .animate-card-5 {
     animation: none !important;
     opacity: 1 !important;
     translate: 0 0 !important;

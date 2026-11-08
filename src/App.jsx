@@ -34,7 +34,7 @@ const logoItem = [
     href: 'https://www.groovity.studio',
     icon: (
       <span className="flex h-[1.5em] w-[1.5em] items-center justify-center">
-        <img src={groovityLogo} alt="SoundClash home" className="h-full w-full object-contain" draggable={false} />
+        <img src={groovityLogo} alt="SoundClash home" className="h-full w-full scale-[1.25] object-contain" draggable={false} />
       </span>
     )
   }
