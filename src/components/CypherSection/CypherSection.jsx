@@ -3,7 +3,7 @@ import FaultyTerminal from '../FaultyTerminal/FaultyTerminal';
 import WarpText from '../WarpText/WarpText';
 import VariableProximity from '../VariableProximity/VariableProximity';
 import TiltedCard, { TiltedCardLayer } from '../TiltedCard/TiltedCard';
-import groovityLogo from '../../assets/logo.png';
+import groovityLogo from '../../assets/logo.svg';
 import cypherImg from '../../assets/cypher.webp';
 
 const DEFAULT_SOCIALS = [

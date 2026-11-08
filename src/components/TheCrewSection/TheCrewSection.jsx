@@ -2,7 +2,7 @@ import { useRef, useEffect } from 'react';
 import Dither from '../Dither/Dither';
 import WarpText from '../WarpText/WarpText';
 import VariableProximity from '../VariableProximity/VariableProximity';
-import groovityLogo from '../../assets/logo.png';
+import groovityLogo from '../../assets/logo.svg';
 
 const DEFAULT_SOCIALS = [
   { name: 'Instagram', label: 'Instagram → @groovity.vitb', url: 'https://www.instagram.com/groovity.vitb?utm_source=ig_web_button_share_sheet&mdxt=ZDNlZDc0MzIxNw==' },
@@ -46,7 +46,7 @@ function TheCrewSection({
   };
 
   return (
-    <section className="relative w-full h-full overflow-hidden bg-[#0c0a14]">
+    <section className="relative w-full h-full overflow-hidden bg-[#120f17]">
       {/* Full-screen Procedural Dither Background - Fixed in place while cards scroll */}
       <div className="fixed inset-0 w-full h-full pointer-events-none z-0">
         <Dither

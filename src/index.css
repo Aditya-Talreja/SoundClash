@@ -43,6 +43,38 @@ body {
   overflow-x: hidden;
 }
 
+/* Keep the native cursor on touch devices and use this visual replacement on desktop. */
+@media (hover: hover) and (pointer: fine) {
+  /* Temporarily disabled with CursorGlow in App.jsx to keep the native pointer. */
+  /* html, body, body * {
+    cursor: none !important;
+  } */
+
+  .cursor-glow {
+    position: fixed;
+    inset: 0 auto auto 0;
+    width: 25px;
+    height: 31px;
+    z-index: 2147483647;
+    pointer-events: none;
+    opacity: 0;
+    transform: translate3d(-100px, -100px, 0);
+    transition: opacity 120ms ease;
+    will-change: transform, opacity;
+  }
+
+  .cursor-glow.is-visible { opacity: 1; }
+
+  .cursor-glow-arrow {
+    position: absolute;
+    left: -5px;
+    top: -9px;
+    width: 35px;
+    height: 35px;
+    object-fit: contain;
+  }
+}
+
 /* === GooeyNav Specific Styles for Tailwind v4 compatibility === */
 .gn-root {
   position: relative;
@@ -392,6 +424,179 @@ body {
   }
 }
 
+@keyframes navbarComeUp {
+  from {
+    opacity: 0;
+    translate: 0 22px;
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+
+.logo-intro-mark {
+  animation: logoIntroFade 500ms ease-in 2.35s forwards;
+}
+
+.logo-intro-mark-static {
+  animation: none;
+}
+
+@keyframes logoIntroFade {
+  to {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+}
+
+.site-navbar-comeup .gn-root.site-navbar {
+  animation: navbarComeUp 0.58s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.site-navbar-waiting .gn-root.site-navbar {
+  opacity: 0;
+}
+
+@keyframes neonOutlineReveal {
+  0% {
+    stroke-dashoffset: 1;
+    stroke-opacity: 0;
+    fill-opacity: 0;
+  }
+  8% {
+    stroke-opacity: 1;
+  }
+  72% {
+    stroke-dashoffset: 0;
+    stroke-opacity: 1;
+    fill-opacity: 0;
+  }
+  100% {
+    stroke-dashoffset: 0;
+    stroke-opacity: 0;
+    fill-opacity: 1;
+  }
+}
+
+.neon-intro-mark {
+  width: min(15rem, 64vw);
+  height: auto;
+  overflow: visible;
+  animation: neonIntroSettle 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+.neon-outline-path {
+  stroke: currentColor;
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  fill-opacity: 0;
+  stroke-opacity: 0;
+  animation: neonOutlineReveal 1.08s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.neon-outline-path--white {
+  color: #ffffff;
+  filter: drop-shadow(0 0 2px #ffffff) drop-shadow(0 0 9px rgba(255, 255, 255, 0.8));
+}
+
+.neon-outline-path--yellow {
+  color: #ffff00;
+  filter: drop-shadow(0 0 2px #ffff00) drop-shadow(0 0 10px rgba(255, 255, 0, 0.85));
+  animation-delay: 120ms;
+}
+
+@keyframes neonIntroSettle {
+  0% {
+    transform: scale(0.94);
+  }
+  72% {
+    transform: scale(1.025);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.crt-glitch-mark {
+  position: relative;
+  width: min(16rem, 68vw);
+  aspect-ratio: 1;
+  isolation: isolate;
+}
+
+.crt-glitch-layer {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  user-select: none;
+}
+
+.crt-glitch-layer--base {
+  animation: crtLogoLock 1.18s steps(1, end) both;
+}
+
+.crt-glitch-layer--cyan {
+  opacity: 0;
+  filter: drop-shadow(0 0 2px #00efff) drop-shadow(0 0 8px rgba(0, 239, 255, 0.9));
+  mix-blend-mode: screen;
+  animation: crtChannelCyan 1.12s steps(1, end) both;
+}
+
+.crt-glitch-layer--magenta {
+  opacity: 0;
+  filter: drop-shadow(0 0 2px #ff2fd2) drop-shadow(0 0 8px rgba(255, 47, 210, 0.85));
+  mix-blend-mode: screen;
+  animation: crtChannelMagenta 1.12s steps(1, end) both;
+}
+
+.crt-glitch-intro::after {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  content: '';
+  opacity: 0.08;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0,
+    transparent 2px,
+    rgba(255, 255, 255, 0.42) 3px
+  );
+}
+
+@keyframes crtLogoLock {
+  0% { opacity: 0; filter: blur(8px); transform: scaleX(0.82) skewX(6deg); clip-path: inset(48% 0 48%); }
+  8% { opacity: 0.95; filter: blur(1px); transform: translateX(-5px) scaleX(1.08); clip-path: inset(44% 0 46%); }
+  14% { opacity: 0.25; transform: translateX(7px) scaleX(0.94); clip-path: inset(0 0 75%); }
+  21% { opacity: 1; filter: blur(0); transform: translateX(0) scaleX(1); clip-path: inset(0); }
+  29% { opacity: 0.55; transform: translateX(-4px) scaleX(1.03); clip-path: inset(36% 0 18%); }
+  35% { opacity: 1; transform: none; clip-path: inset(0); }
+  47% { opacity: 0.72; transform: translateX(3px); clip-path: inset(8% 0 68%); }
+  53% { opacity: 1; transform: none; clip-path: inset(0); }
+  68% { opacity: 0.92; filter: drop-shadow(0 0 12px rgba(0, 239, 255, 0.45)); }
+  100% { opacity: 1; filter: drop-shadow(0 0 3px rgba(0, 239, 255, 0.35)); transform: none; clip-path: inset(0); }
+}
+
+@keyframes crtChannelCyan {
+  0%, 7%, 15%, 32%, 39%, 56%, 72%, 100% { opacity: 0; transform: none; clip-path: inset(0); }
+  8%, 14% { opacity: 0.8; transform: translateX(-9px) scaleX(1.06); clip-path: inset(38% 0 42%); }
+  33%, 38% { opacity: 0.65; transform: translateX(7px); clip-path: inset(0 0 71%); }
+  57%, 71% { opacity: 0.55; transform: translateX(-4px); clip-path: inset(63% 0 13%); }
+}
+
+@keyframes crtChannelMagenta {
+  0%, 10%, 19%, 36%, 43%, 61%, 76%, 100% { opacity: 0; transform: none; clip-path: inset(0); }
+  11%, 18% { opacity: 0.8; transform: translateX(8px) scaleX(0.96); clip-path: inset(12% 0 68%); }
+  37%, 42% { opacity: 0.6; transform: translateX(-6px); clip-path: inset(49% 0 33%); }
+  62%, 75% { opacity: 0.5; transform: translateX(4px); clip-path: inset(17% 0 58%); }
+}
+
 .animate-card-1,
 .section-active .animate-card-1 {
   animation: cardEntrance 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
@@ -416,6 +621,12 @@ body {
   animation-delay: 0.50s;
 }
 
+/* After the intro, bring in the navbar first, then the cards from left to right. */
+.page-entry-sequence .animate-card-1 { animation-delay: 0.62s; }
+.page-entry-sequence .animate-card-2 { animation-delay: 0.84s; }
+.page-entry-sequence .animate-card-3 { animation-delay: 1.06s; }
+.page-entry-sequence .animate-card-4 { animation-delay: 1.28s; }
+
 .section-inactive .animate-card-1,
 .section-inactive .animate-card-2,
 .section-inactive .animate-card-3,
@@ -434,6 +645,12 @@ body {
   .section-active .animate-card-2,
   .section-active .animate-card-3,
   .section-active .animate-card-4 {
+    animation: none !important;
+    opacity: 1 !important;
+    translate: 0 0 !important;
+  }
+
+  .site-navbar-comeup .gn-root.site-navbar {
     animation: none !important;
     opacity: 1 !important;
     translate: 0 0 !important;

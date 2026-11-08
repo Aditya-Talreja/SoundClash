@@ -3,7 +3,7 @@ import CRTWarp from '../CRTWarp/CRTWarp';
 import WarpText from '../WarpText/WarpText';
 import VariableProximity from '../VariableProximity/VariableProximity';
 import TiltedCard, { TiltedCardLayer } from '../TiltedCard/TiltedCard';
-import groovityLogo from '../../assets/logo.png';
+import groovityLogo from '../../assets/logo.svg';
 import graffitiImg from '../../assets/graffiti.webp';
 
 const DEFAULT_SOCIALS = [
@@ -52,7 +52,7 @@ function GraffitiSection({
       <div className="fixed inset-0 w-full h-full pointer-events-none z-0">
         <CRTWarp
           color="#c755f7"
-          backgroundColor="#120f17"
+          backgroundColor="#0a0a0a"
           mask="aperture"
           curvature={0.25}
           persistence={0.4}

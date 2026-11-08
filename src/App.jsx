@@ -4,7 +4,12 @@ import SoundClashSection from './components/SoundClashSection/SoundClashSection'
 import GraffitiSection from './components/GraffitiSection/GraffitiSection';
 import CypherSection from './components/CypherSection/CypherSection';
 import TheCrewSection from './components/TheCrewSection/TheCrewSection';
-import groovityLogo from './assets/logo.png';
+import SiteIntro from './components/LogoReveal/SiteIntro';
+import NeonOutlineIntro from './components/LogoReveal/NeonOutlineIntro';
+import CrtGlitchIntro from './components/LogoReveal/CrtGlitchIntro';
+import DitherLogoIntro from './components/LogoReveal/DitherLogoIntro';
+import groovityLogo from './assets/logo.svg';
+// import CursorGlow from './components/CursorGlow'; // Re-enable alongside the JSX mount below.
 
 const sectionItems = [
   { label: 'SoundClash' },
@@ -38,11 +43,51 @@ const logoItem = [
 const items = [...logoItem, ...sectionItems];
 
 const PILL_COLOR = '#ffffff';
+// Switch between 'dither-logo', 'crt', 'neon', 'glass', or 'off'.
+const INTRO_STYLE = 'dither-logo';
+const INTRO_SESSION_KEY = 'groovity-logo-intro-played';
+const INTRO_BACKGROUND_BY_SECTION = ['#120f17', '#0a0a0a', '#0d0d12', '#120f17'];
+
+function shouldPlaySessionIntro() {
+  if (typeof window === 'undefined') return false;
+  const forceIntro = new URLSearchParams(window.location.search).get('intro') === 'play';
+
+  try {
+    const alreadyPlayed = window.sessionStorage.getItem(INTRO_SESSION_KEY) === 'true';
+    if (alreadyPlayed && !forceIntro) return false;
+    window.sessionStorage.setItem(INTRO_SESSION_KEY, 'true');
+    return true;
+  } catch {
+    return true;
+  }
+}
 
 function App() {
+  const [introMode] = useState(() =>
+    typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('intro') === 'inline'
+      ? 'inline'
+      : 'wait'
+  );
+  const [shouldPlayIntro] = useState(() =>
+    INTRO_STYLE === 'dither-logo' ? shouldPlaySessionIntro() : false
+  );
+  const introStartsComplete = INTRO_STYLE === 'off' || (INTRO_STYLE === 'dither-logo' && !shouldPlayIntro);
+  const [introComplete, setIntroComplete] = useState(introStartsComplete);
+  const [entrySequence, setEntrySequence] = useState(INTRO_STYLE === 'off');
   const [activeIndex, setActiveIndex] = useState(() =>
     typeof window === 'undefined' ? 0 : getSectionIndexFromHash(window.location.hash)
   );
+
+  const completeIntro = () => {
+    setIntroComplete(true);
+    setEntrySequence(true);
+  };
+
+  useEffect(() => {
+    if (!entrySequence) return undefined;
+    const timeout = window.setTimeout(() => setEntrySequence(false), 2200);
+    return () => window.clearTimeout(timeout);
+  }, [entrySequence]);
 
   const navigateToSection = (index) => {
     const safeIndex = Math.max(0, Math.min(sectionSlugs.length - 1, index));
@@ -69,8 +114,25 @@ function App() {
 
   return (
     <div className="relative min-h-[100dvh] bg-[#0a0a0a] overflow-hidden">
+      {/* Temporarily disabled; restore this mount to use the custom cursor. */}
+      {/* <CursorGlow /> */}
+      {INTRO_STYLE === 'glass' && !introComplete && (
+        <SiteIntro mode={introMode} onComplete={completeIntro} />
+      )}
+      {INTRO_STYLE === 'neon' && !introComplete && (
+        <NeonOutlineIntro onComplete={completeIntro} />
+      )}
+      {INTRO_STYLE === 'crt' && !introComplete && (
+        <CrtGlitchIntro onComplete={completeIntro} />
+      )}
+      {INTRO_STYLE === 'dither-logo' && !introComplete && (
+        <DitherLogoIntro
+          targetBackgroundColor={INTRO_BACKGROUND_BY_SECTION[activeIndex]}
+          onComplete={completeIntro}
+        />
+      )}
       {/* Main GooeyNav with the logo shortcut as its leading item. */}
-      <div className="fixed top-4 sm:top-6 left-1/2 -translate-x-1/2 z-[100] isolate pointer-events-auto max-w-[calc(100vw-1.5rem)]">
+      <div className={`fixed top-4 sm:top-6 left-1/2 -translate-x-1/2 z-[100] isolate pointer-events-auto max-w-[calc(100vw-1.5rem)]${!introComplete ? ' site-navbar-waiting' : entrySequence ? ' site-navbar-comeup' : ''}`}>
         <GooeyNav
           items={items}
           className="site-navbar"
@@ -103,8 +165,9 @@ function App() {
         */}
       </div>
 
-      {/* Section Content: Mount only active section to avoid WebGL context collisions */}
-      <main className="relative w-full h-[100dvh] overflow-hidden">
+      {/* Wait mode mounts section WebGL only after the intro has finished. */}
+      {(INTRO_STYLE === 'off' || (INTRO_STYLE === 'glass' && introMode === 'inline') || introComplete) && (
+        <main className={`relative w-full h-[100dvh] overflow-hidden${entrySequence ? ' page-entry-sequence' : ''}`}>
         {activeIndex === 0 && (
           <div id="soundclash" className="absolute inset-0 w-full h-full pointer-events-auto">
             <SoundClashSection
@@ -144,7 +207,8 @@ function App() {
             />
           </div>
         )}
-      </main>
+        </main>
+      )}
     </div>
   );
 }
