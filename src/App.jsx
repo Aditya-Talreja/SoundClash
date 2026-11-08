@@ -73,7 +73,9 @@ function App() {
   );
   const introStartsComplete = INTRO_STYLE === 'off' || (INTRO_STYLE === 'dither-logo' && !shouldPlayIntro);
   const [introComplete, setIntroComplete] = useState(introStartsComplete);
-  const [entrySequence, setEntrySequence] = useState(INTRO_STYLE === 'off');
+  const [entrySequence, setEntrySequence] = useState(
+    INTRO_STYLE === 'off' || (INTRO_STYLE === 'dither-logo' && !shouldPlayIntro)
+  );
   const [activeIndex, setActiveIndex] = useState(() =>
     typeof window === 'undefined' ? 0 : getSectionIndexFromHash(window.location.hash)
   );

@@ -35,6 +35,17 @@
   box-sizing: border-box;
 }
 
+html, body, * {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+*::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
 body {
   min-height: 100vh;
   font-family: 'Space Grotesk', system-ui, -apple-system, sans-serif;
