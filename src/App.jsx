@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import GooeyNav from './components/GooeyNav/GooeyNav';
 import SoundClashSection from './components/SoundClashSection/SoundClashSection';
 import GraffitiSection from './components/GraffitiSection/GraffitiSection';
@@ -12,6 +12,16 @@ const sectionItems = [
   { label: 'Cypher' },
   { label: 'TheCrew' }
 ];
+
+const sectionSlugs = ['soundclash', 'graffiti', 'cypher', 'crew'];
+
+function getSectionIndexFromHash(hash) {
+  const slug = hash.replace(/^#/, '').toLowerCase();
+  const aliases = { 'sound-clash': 'soundclash', 'the-crew': 'crew', thecrew: 'crew' };
+  const normalizedSlug = aliases[slug] ?? slug;
+  const index = sectionSlugs.indexOf(normalizedSlug);
+  return index === -1 ? 0 : index;
+}
 
 const logoItem = [
   {
@@ -30,7 +40,32 @@ const items = [...logoItem, ...sectionItems];
 const PILL_COLOR = '#ffffff';
 
 function App() {
-  const [activeIndex, setActiveIndex] = useState(0);
+  const [activeIndex, setActiveIndex] = useState(() =>
+    typeof window === 'undefined' ? 0 : getSectionIndexFromHash(window.location.hash)
+  );
+
+  const navigateToSection = (index) => {
+    const safeIndex = Math.max(0, Math.min(sectionSlugs.length - 1, index));
+    const nextHash = `#${sectionSlugs[safeIndex]}`;
+    setActiveIndex(safeIndex);
+
+    if (window.location.hash !== nextHash) {
+      window.history.pushState(null, '', nextHash);
+    }
+  };
+
+  useEffect(() => {
+    const syncSectionFromUrl = () => {
+      setActiveIndex(getSectionIndexFromHash(window.location.hash));
+    };
+
+    window.addEventListener('popstate', syncSectionFromUrl);
+    window.addEventListener('hashchange', syncSectionFromUrl);
+    return () => {
+      window.removeEventListener('popstate', syncSectionFromUrl);
+      window.removeEventListener('hashchange', syncSectionFromUrl);
+    };
+  }, []);
 
   return (
     <div className="relative min-h-[100dvh] bg-[#0a0a0a] overflow-hidden">
@@ -40,7 +75,7 @@ function App() {
           items={items}
           className="site-navbar"
           activeIndex={activeIndex + 1}
-          onChange={(index) => setActiveIndex(Math.max(0, index - 1))}
+          onChange={(index) => navigateToSection(Math.max(0, index - 1))}
           theme="dark"
           color={PILL_COLOR}
           activeTextColor="#000000"
@@ -71,41 +106,41 @@ function App() {
       {/* Section Content: Mount only active section to avoid WebGL context collisions */}
       <main className="relative w-full h-[100dvh] overflow-hidden">
         {activeIndex === 0 && (
-          <div className="absolute inset-0 w-full h-full pointer-events-auto">
+          <div id="soundclash" className="absolute inset-0 w-full h-full pointer-events-auto">
             <SoundClashSection
               active={true}
-              onNavigateToGraffiti={() => setActiveIndex(1)}
-              onNavigateToCypher={() => setActiveIndex(2)}
-              onNavigateToCrew={() => setActiveIndex(3)}
+              onNavigateToGraffiti={() => navigateToSection(1)}
+              onNavigateToCypher={() => navigateToSection(2)}
+              onNavigateToCrew={() => navigateToSection(3)}
             />
           </div>
         )}
 
         {activeIndex === 1 && (
-          <div className="absolute inset-0 w-full h-full pointer-events-auto">
+          <div id="graffiti" className="absolute inset-0 w-full h-full pointer-events-auto">
             <GraffitiSection
               active={true}
-              onNavigateToCypher={() => setActiveIndex(2)}
+              onNavigateToCypher={() => navigateToSection(2)}
             />
           </div>
         )}
 
         {activeIndex === 2 && (
-          <div className="absolute inset-0 w-full h-full pointer-events-auto">
+          <div id="cypher" className="absolute inset-0 w-full h-full pointer-events-auto">
             <CypherSection
               active={true}
-              onNavigateToGraffiti={() => setActiveIndex(1)}
+              onNavigateToGraffiti={() => navigateToSection(1)}
             />
           </div>
         )}
 
         {activeIndex === 3 && (
-          <div className="absolute inset-0 w-full h-full pointer-events-auto">
+          <div id="crew" className="absolute inset-0 w-full h-full pointer-events-auto">
             <TheCrewSection
               active={true}
-              onNavigateToSoundClash={() => setActiveIndex(0)}
-              onNavigateToGraffiti={() => setActiveIndex(1)}
-              onNavigateToCypher={() => setActiveIndex(2)}
+              onNavigateToSoundClash={() => navigateToSection(0)}
+              onNavigateToGraffiti={() => navigateToSection(1)}
+              onNavigateToCypher={() => navigateToSection(2)}
             />
           </div>
         )}
